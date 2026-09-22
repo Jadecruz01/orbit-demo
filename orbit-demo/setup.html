@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client demos · ORBIT setup</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="css/app.css?v=7">
+<style>
+body{background:var(--bg)}
+.su{max-width:1320px;margin:0 auto;padding:24px 20px 60px}
+.su-h{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.su-h h1{margin:0;font-size:22px}
+.su-g{display:grid;grid-template-columns:420px 1fr;gap:18px;align-items:start}
+.su-g>*{min-width:0}
+.su label.f{margin-bottom:10px}
+.su textarea.in{min-height:110px;resize:vertical}
+.su .row2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.su iframe{width:100%;height:720px;border:0;border-radius:12px;background:var(--panel);box-shadow:var(--shadow)}
+.su .out{font-family:var(--mono);font-size:12px;word-break:break-all;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 10px}
+.su .steps{margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:var(--ink2)}
+.su .cl{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.su .cl:last-child{border-bottom:0}
+.su .cl b{flex:1}
+.su .sw{width:18px;height:18px;border-radius:5px;flex:none}
+@media (max-width:1000px){.su-g{grid-template-columns:1fr}.su iframe{height:560px}}
+</style>
+</head>
+<body>
+<div class="su">
+  <div class="su-h"><h1>Client demos</h1><span class="pill neu">Starsonn only</span></div>
+  <p class="muted" style="margin:0 0 18px">Set up a personalised welcome screen for each client. The preview updates as you type.</p>
+  <div class="su-g">
+    <div class="stack">
+      <div class="card"><div class="card-h"><h3>Your clients</h3><div class="r"><button class="btn sm" id="new">New client</button></div></div><div class="card-b" id="list"></div></div>
+      <form class="card" id="f" onsubmit="return false"><div class="card-h"><h3 id="ftitle">New client</h3></div><div class="card-b">
+        <div class="row2"><label class="f"><span>Company</span><input class="in" name="company" placeholder="Elk River"></label><label class="f"><span>Link name (slug)</span><input class="in mono" name="slug" placeholder="elk-river"></label></div>
+        <div class="row2"><label class="f"><span>Contact name</span><input class="in" name="contact" placeholder="Chase Clemmons"></label><label class="f"><span>Contact title</span><input class="in" name="title" placeholder="Representative"></label></div>
+        <div class="row2"><label class="f"><span>Contact email (optional)</span><input class="in" name="email"></label><label class="f"><span>Website</span><input class="in" name="website" placeholder="https://..."></label></div>
+        <label class="f"><span>Logo image URL (optional, dark text on light)</span><input class="in" name="logo" placeholder="https://.../logo.png"></label>
+        <label class="f"><span>White logo URL for dark mode (optional)</span><input class="in" name="logoDark"></label>
+        <div class="row2"><label class="f"><span>Tagline</span><input class="in" name="tagline"></label><label class="f"><span>Location</span><input class="in" name="location"></label></div>
+        <div class="row2"><label class="f"><span>Brand colour</span><input class="in" name="color" type="color" value="#2563EB" style="height:36px;padding:3px"></label><label class="f"><span>What they use today</span><input class="in" name="currentSystem" placeholder="Q-inmass"></label></div>
+        <label class="f"><span>Sample data</span><select class="in" name="data"><option value="fallpro">Fall-protection manufacturer</option><option value="machine">Machine shop (pumps, valves, controls)</option></select></label>
+        <label class="f"><span>Headline</span><input class="in" name="headline" placeholder="Inventory control built around how ... works."></label>
+        <label class="f"><span>Personal note (signed by you)</span><textarea class="in" name="note"></textarea></label>
+        <div class="row2"><label class="f"><span>Demo date</span><input class="in" name="demoDate"></label><label class="f" style="display:flex;gap:8px;align-items:center;margin-top:22px"><input type="checkbox" name="active" checked> Link is live</label></div>
+      </div></form>
+      <div class="card"><div class="card-h"><h3>Send it</h3></div><div class="card-b">
+        <div class="small muted">Instant link: works right now, no upload needed (long, but fine to paste into an email)</div>
+        <div class="out" id="instant"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"><button class="btn sm" id="copyI">Copy instant link</button><a class="btn sm" id="openI" target="_blank" rel="noopener">Open</a></div>
+        <div class="small muted">Clean link: works after you publish the updated clients list</div>
+        <div class="out" id="clean"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"><button class="btn sm" id="copyC">Copy clean link</button><button class="btn sm pri" id="dl">Download updated clients.js</button></div>
+        <ol class="steps"><li>Click <b>Download updated clients.js</b>.</li><li>On GitHub, open <b>orbit-demo / orbit-demo / js</b> → <b>Add file → Upload files</b>, drop the file in, and commit. (Or ask Claude to do it.)</li><li>After about a minute the clean link works.</li></ol>
+      </div></div>
+    </div>
+    <div><div class="small muted" style="margin-bottom:6px">Live preview of the welcome screen</div><iframe id="pv" title="Welcome screen preview"></iframe></div>
+  </div>
+</div>
+<script src="js/clients.js?v=7"></script>
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)}, F=$('#f');
+  var clients=JSON.parse(JSON.stringify(window.ORBIT_CLIENTS||{})), editing=null;
+  var BASE=location.href.split('?')[0].split('#')[0].replace(/setup\.html$/,'');
+  var FIELDS=['company','website','logo','logoDark','tagline','location','contact','title','email','color','currentSystem','data','headline','note','demoDate'];
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function slugify(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)}
+  function read(){ var o={}; FIELDS.forEach(function(k){ var v=F[k].value.trim(); if(v) o[k]=v; }); o.active=F.active.checked; var s=slugify(F.slug.value||o.company); return {slug:s,entry:o}; }
+  function fill(slug,e){ editing=slug; F.slug.value=slug||''; FIELDS.forEach(function(k){ F[k].value=(e&&e[k])||(k==='color'?'#2563EB':k==='data'?'fallpro':''); }); F.active.checked=!e||e.active!==false; $('#ftitle').textContent=slug?'Editing '+(e.company||slug):'New client'; update(); }
+  function b64(o){ return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+  var t=null;
+  function update(){ var r=read(); var e=Object.assign({slug:r.slug},r.entry);
+    var inst=BASE+'?w='+b64(e), clean=BASE+'?c='+r.slug;
+    $('#instant').textContent=inst; $('#clean').textContent=r.slug?clean:'(add a company name)'; $('#openI').href=inst;
+    clearTimeout(t); t=setTimeout(function(){ $('#pv').src=BASE+'?w='+b64(Object.assign({},e,{slug:'preview-'+(r.slug||'x')}))+'&t='+Date.now(); },400);
+    drawList(); }
+  function drawList(){ var ks=Object.keys(clients); $('#list').innerHTML=ks.length?ks.map(function(k){ var c=clients[k]; return '<div class="cl"><span class="sw" style="background:'+esc(c.color||'#2563EB')+'"></span><b>'+esc(c.company||k)+'<div class="muted small" style="font-weight:400">'+esc(c.contact||'')+(c.active===false?' · hidden':'')+'</div></b><a class="btn sm ghost" target="_blank" rel="noopener" href="'+esc(BASE+'?c='+k)+'">Open</a><button class="btn sm" data-edit="'+esc(k)+'">Edit</button><button class="btn sm ghost danger" data-del="'+esc(k)+'">Remove</button></div>'; }).join(''):'<div class="muted small">No clients yet.</div>';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-edit]'),function(b){ b.onclick=function(){ fill(b.dataset.edit,clients[b.dataset.edit]); }; });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-del]'),function(b){ b.onclick=function(){ if(confirmDel(b.dataset.del)){ delete clients[b.dataset.del]; if(editing===b.dataset.del) fill(null,null); drawList(); } }; }); }
+  function confirmDel(k){ var el=document.querySelector('[data-del="'+k+'"]'); if(el.dataset.sure){ return true; } el.dataset.sure=1; el.textContent='Click again to remove'; setTimeout(function(){ if(el){ delete el.dataset.sure; el.textContent='Remove'; } },3000); return false; }
+  function commitForm(){ var r=read(); if(!r.slug) return false; if(editing&&editing!==r.slug) delete clients[editing]; clients[r.slug]=r.entry; editing=r.slug; return true; }
+  function copy(txt,btn){ var done=function(){ var o=btn.textContent; btn.textContent='Copied'; setTimeout(function(){btn.textContent=o},1500); }; if(navigator.clipboard) navigator.clipboard.writeText(txt).then(done,function(){ prompt('Copy this',txt); }); else prompt('Copy this',txt); }
+  F.addEventListener('input',function(e){ if(e.target.name==='company'&&!editing) F.slug.placeholder=slugify(F.company.value)||'elk-river'; update(); });
+  F.addEventListener('change',update);
+  $('#new').onclick=function(){ fill(null,null); F.company.focus(); };
+  $('#copyI').onclick=function(){ copy($('#instant').textContent,this); };
+  $('#copyC').onclick=function(){ commitForm(); drawList(); copy($('#clean').textContent,this); };
+  $('#dl').onclick=function(){ if(!commitForm()){ alert('Add a company name first.'); return; } drawList();
+    fetch('js/clients.js',{cache:'no-store'}).then(function(r){return r.text()}).then(function(src){
+      var a=src.indexOf('// ---- clients start ----'), b=src.indexOf('// ---- clients end ----');
+      if(a<0||b<0) throw new Error('markers missing');
+      var body='// ---- clients start ----\nwindow.ORBIT_CLIENTS = '+JSON.stringify(clients,null,2)+';\n';
+      var out=src.slice(0,a)+body+src.slice(b);
+      var bl=new Blob([out],{type:'text/javascript'}), l=document.createElement('a'); l.href=URL.createObjectURL(bl); l.download='clients.js'; document.body.appendChild(l); l.click(); l.remove();
+    }).catch(function(e){ alert('Could not build clients.js: '+e.message); }); };
+  var first=Object.keys(clients)[0]; fill(first||null, first?clients[first]:null);
+})();
+</script>
+</body>
+</html>
