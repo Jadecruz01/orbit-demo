@@ -34,7 +34,7 @@ body{background:var(--bg)}
     <div class="stack">
       <div class="card"><div class="card-h"><h3>Your clients</h3><div class="r"><button class="btn sm" id="new">New client</button></div></div><div class="card-b" id="list"></div></div>
       <form class="card" id="f" onsubmit="return false"><div class="card-h"><h3 id="ftitle">New client</h3></div><div class="card-b">
-        <div class="row2"><label class="f"><span>Company</span><input class="in" name="company" placeholder="Elk River"></label><label class="f"><span>Link name (slug)</span><input class="in mono" name="slug" placeholder="elk-river"></label></div>
+        <div class="row2"><label class="f"><span>Company</span><input class="in" name="company" placeholder="Company name"></label><label class="f"><span>Link name (slug)</span><input class="in mono" name="slug" placeholder="company-name"></label></div>
         <div class="row2"><label class="f"><span>Contact name</span><input class="in" name="contact" placeholder="Chase Clemmons"></label><label class="f"><span>Contact title</span><input class="in" name="title" placeholder="Representative"></label></div>
         <div class="row2"><label class="f"><span>Contact email (optional)</span><input class="in" name="email"></label><label class="f"><span>Website</span><input class="in" name="website" placeholder="https://..."></label></div>
         <label class="f"><span>Own web address (optional, e.g. client-orbitdemo.starsonn.com)</span><input class="in mono" name="host" placeholder="leave blank to use the ?c= link"></label>
@@ -84,7 +84,7 @@ body{background:var(--bg)}
   function confirmDel(k){ var el=document.querySelector('[data-del="'+k+'"]'); if(el.dataset.sure){ return true; } el.dataset.sure=1; el.textContent='Click again to remove'; setTimeout(function(){ if(el){ delete el.dataset.sure; el.textContent='Remove'; } },3000); return false; }
   function commitForm(){ var r=read(); if(!r.slug) return false; if(editing&&editing!==r.slug) delete clients[editing]; clients[r.slug]=r.entry; editing=r.slug; return true; }
   function copy(txt,btn){ var done=function(){ var o=btn.textContent; btn.textContent='Copied'; setTimeout(function(){btn.textContent=o},1500); }; if(navigator.clipboard) navigator.clipboard.writeText(txt).then(done,function(){ prompt('Copy this',txt); }); else prompt('Copy this',txt); }
-  F.addEventListener('input',function(e){ if(e.target.name==='company'&&!editing) F.slug.placeholder=slugify(F.company.value)||'elk-river'; update(); });
+  F.addEventListener('input',function(e){ if(e.target.name==='company'&&!editing) F.slug.placeholder=slugify(F.company.value)||'client'; update(); });
   F.addEventListener('change',update);
   $('#new').onclick=function(){ fill(null,null); F.company.focus(); };
   $('#copyI').onclick=function(){ copy($('#instant').textContent,this); };
