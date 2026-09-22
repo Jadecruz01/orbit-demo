@@ -1,7 +1,7 @@
 /* ORBIT core: store, inventory math, UI helpers */
 const SUGGEST_TO = 'jadecruz@starsonn.com';   // where "Suggest a change" emails go
 const APP = { name:'ORBIT', version:'0.1 prototype' };
-const KEY = 'orbit.db.v3';
+const KEY = 'orbit.db.v3'+(window.ORBIT_CLIENT?'.'+window.ORBIT_CLIENT.slug:'');
 
 const $ = (s,el=document)=>el.querySelector(s);
 const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
