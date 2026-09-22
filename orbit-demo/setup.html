@@ -37,6 +37,7 @@ body{background:var(--bg)}
         <div class="row2"><label class="f"><span>Company</span><input class="in" name="company" placeholder="Elk River"></label><label class="f"><span>Link name (slug)</span><input class="in mono" name="slug" placeholder="elk-river"></label></div>
         <div class="row2"><label class="f"><span>Contact name</span><input class="in" name="contact" placeholder="Chase Clemmons"></label><label class="f"><span>Contact title</span><input class="in" name="title" placeholder="Representative"></label></div>
         <div class="row2"><label class="f"><span>Contact email (optional)</span><input class="in" name="email"></label><label class="f"><span>Website</span><input class="in" name="website" placeholder="https://..."></label></div>
+        <label class="f"><span>Own web address (optional, e.g. client-orbitdemo.starsonn.com)</span><input class="in mono" name="host" placeholder="leave blank to use the ?c= link"></label>
         <label class="f"><span>Logo image URL (optional, dark text on light)</span><input class="in" name="logo" placeholder="https://.../logo.png"></label>
         <label class="f"><span>White logo URL for dark mode (optional)</span><input class="in" name="logoDark"></label>
         <div class="row2"><label class="f"><span>Tagline</span><input class="in" name="tagline"></label><label class="f"><span>Location</span><input class="in" name="location"></label></div>
@@ -65,7 +66,7 @@ body{background:var(--bg)}
   var $=function(s){return document.querySelector(s)}, F=$('#f');
   var clients=JSON.parse(JSON.stringify(window.ORBIT_CLIENTS||{})), editing=null;
   var BASE=location.href.split('?')[0].split('#')[0].replace(/setup\.html$/,'');
-  var FIELDS=['company','website','logo','logoDark','tagline','location','contact','title','email','color','currentSystem','data','headline','note','demoDate'];
+  var FIELDS=['company','website','host','logo','logoDark','tagline','location','contact','title','email','color','currentSystem','data','headline','note','demoDate'];
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function slugify(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)}
   function read(){ var o={}; FIELDS.forEach(function(k){ var v=F[k].value.trim(); if(v) o[k]=v; }); o.active=F.active.checked; var s=slugify(F.slug.value||o.company); return {slug:s,entry:o}; }
