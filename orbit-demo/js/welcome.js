@@ -14,7 +14,7 @@ const css = `
 .wl-word{font:700 22px/1 Georgia,'Times New Roman',serif;letter-spacing:-.01em}
 .wl-word small{display:block;font:italic 12px/1.4 Georgia,serif;color:var(--clInk);margin-top:2px}
 .wl-x{color:var(--ink3);font-size:18px}
-.wl-orbit{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.14em;font-size:13px}
+.wl-orbit{display:flex;align-items:flex-start;gap:8px;font-weight:700;letter-spacing:.14em;font-size:13px}.wl-orbit>svg{margin-top:-3.75px;flex:none}
 .wl-orbit small{font-weight:500;letter-spacing:.02em;color:var(--ink3);font-size:12px}
 .wl-top .sp{flex:1}
 .wl-ob{display:flex;flex-direction:column;gap:4px}
@@ -121,7 +121,7 @@ const css = `
 @media (max-width:980px){.wl-stats{grid-template-columns:1fr 1fr}.wl-mock{transform:none}}
 @media (max-width:620px){.wl-cat .row{grid-template-columns:96px 1fr 58px;gap:8px}.wl-cue{bottom:14px}}
 @media (max-width:980px){.wl-hero{grid-template-columns:1fr;gap:32px;padding-top:36px}.wl-mock{transform:none}.wl-feat{grid-template-columns:1fr 1fr}.wl-steps{grid-template-columns:1fr 1fr}.wl-band{grid-template-columns:1fr}}
-@media (max-width:620px){.wl-feat,.wl-steps{grid-template-columns:1fr}.wl-contact{grid-template-columns:1fr}.wl-top{gap:10px}.wl-orbit small,.wl-x,.wl-pill,.wl-of{display:none}.wl-go{width:100%;justify-content:center}.wl-sec{width:100%;text-align:center}}
+@media (max-width:620px){.wl-feat,.wl-steps{grid-template-columns:1fr}.wl-contact{grid-template-columns:1fr}.wl-top{gap:10px}.wl-orbit small,.wl-x,.wl-pill,.wl-of{display:none}.wl-orbit{align-items:center}.wl-orbit>svg{margin-top:0}.wl-go{width:100%;justify-content:center}.wl-sec{width:100%;text-align:center}}
 `;
 const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
 
@@ -146,7 +146,7 @@ function preview(){
 const I=n=>ic(n);
 function renderWelcome(){
   const p=preview(), sys=C.currentSystem||'your current system';
-  const logo=C.logo?`<img class="wl-logo wl-logo-l" src="${esc(C.logo)}" alt="${esc(C.company)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'wl-word',innerHTML:${esc(JSON.stringify(esc(C.company)))}}))">${C.logoDark?`<img class="wl-logo wl-logo-d" src="${esc(C.logoDark)}" alt="${esc(C.company)}" onerror="this.remove()">`:''}`:`<span class="wl-word">${esc(C.company)}${C.tagline?`<small>${esc(C.tagline)}</small>`:''}</span>`;
+  const logo=C.logo?`<img class="wl-logo wl-logo-l" src="${esc(C.logo)}" alt="${esc(C.company)}" onerror="this.remove()">${C.logoDark?`<img class="wl-logo wl-logo-d" src="${esc(C.logoDark)}" alt="${esc(C.company)}" onerror="this.remove()">`:''}`:'';
   const fp=C.data==='fallpro';
   const feats=fp?[
     ['box','Webbing to finished harness','Roll stock, forged hardware, thread and labels on one screen, with on hand, allocated to jobs, on order and days of supply for every part.'],
@@ -171,7 +171,7 @@ function renderWelcome(){
     ['Open the dashboard','See what needs attention today.'],['Ship an order','Sales orders → Ship.'],['Run a query','Query explorer → pick a starter question.'],['Suggest changes','Use the yellow Suggest button.']];
   document.title=`Welcome, ${first} · ORBIT for ${C.company}`;
   document.body.innerHTML=`<div class="wl"><div class="wl-progress"></div><button class="wl-cue" id="wlCue" aria-label="Scroll to see more"><span class="ms"></span>Scroll to explore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-    <header class="wl-top">${logo}<span class="wl-x">×</span><span class="wl-orbit">${logoMark(22)}<span class="wl-ob"><span>ORBIT <small>by Starsonn</small></span><span class="wl-of"><b>O</b>perations &amp; <b>R</b>esource <b>B</b>usiness <b>I</b>ntelligence <b>T</b>ool</span></span></span><span class="sp"></span><span class="wl-pill">Private demo</span></header>
+    <header class="wl-top">${logo}${logo?`<span class="wl-x">×</span>`:''}<span class="wl-orbit">${logoMark(22)}<span class="wl-ob"><span>ORBIT <small>by Starsonn</small></span><span class="wl-of"><b>O</b>perations &amp; <b>R</b>esource <b>B</b>usiness <b>I</b>ntelligence <b>T</b>ool</span></span></span><span class="sp"></span><span class="wl-pill">Private demo</span></header>
     <div class="wl-wrap">
       <section class="wl-hero">
         <div>
