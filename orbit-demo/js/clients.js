@@ -3,7 +3,8 @@
 // Easiest way to add or change one: open setup.html, fill in the form, then upload the clients.js it gives you to js/.
 // Fields: company, website, logo (image URL, optional), tagline, location, contact, title, email,
 //         color (brand accent), currentSystem (what they use today), data ('fallpro' or 'machine'),
-//         headline, note (personal message on the welcome screen), demoDate, active (false hides the link).
+//         headline, note (personal message on the welcome screen), demoDate, active (false hides the link),
+//         host (optional: a web address that opens straight to this client, e.g. elkriver-orbitdemo.starsonn.com).
 
 window.ORBIT_STARSONN = { name: 'Jade Cruz', role: 'Your Starsonn point of contact', email: 'jadecruz@starsonn.com', phone: '' };
 
@@ -12,6 +13,7 @@ window.ORBIT_CLIENTS = {
   'elk-river': {
     company: 'Elk River',
     website: 'https://elkriver.com',
+    host: 'elkriver-orbitdemo.starsonn.com',
     logo: 'https://elkriver.com/wp-content/uploads/2022/03/logo.png',
     logoDark: 'https://elkriver.com/wp-content/uploads/2022/03/logo-white.png',
     tagline: 'Personal Fall Protection',
@@ -36,6 +38,7 @@ window.ORBIT_CLIENTS = {
   if (p.get('w')) {
     try { c = JSON.parse(decodeURIComponent(escape(atob(p.get('w').replace(/-/g, '+').replace(/_/g, '/'))))); slug = c.slug || 'preview'; } catch (e) { c = null; }
   }
+  if (!c && !slug) { for (var k in window.ORBIT_CLIENTS) { if (window.ORBIT_CLIENTS[k].host && window.ORBIT_CLIENTS[k].host === location.hostname) { slug = k; break; } } }
   if (!c && slug && window.ORBIT_CLIENTS[slug]) c = window.ORBIT_CLIENTS[slug];
   if (c && c.active !== false) { c.slug = slug; window.ORBIT_CLIENT = c; }
 })();
