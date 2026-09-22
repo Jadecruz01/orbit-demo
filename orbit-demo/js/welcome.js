@@ -82,13 +82,48 @@ const css = `
 .wl-anim.d1{animation-delay:.08s}.wl-anim.d2{animation-delay:.16s}.wl-anim.d3{animation-delay:.24s}
 @keyframes wlUp{from{opacity:0;transform:translateY(14px)}}
 @media (prefers-reduced-motion:reduce){.wl-anim{animation:none}.wl-mock{transform:none}}
+.wl-progress{position:fixed;top:0;left:0;right:0;height:3px;transform-origin:0 50%;transform:scaleX(0);background:var(--cl);z-index:30}
+.wl-cue{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:10px;padding:9px 16px 9px 12px;border-radius:99px;background:color-mix(in srgb,var(--panel) 88%,transparent);backdrop-filter:blur(8px);border:1px solid var(--line);box-shadow:var(--shadow);color:var(--ink2);font:700 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:opacity .45s,transform .45s}
+.wl-cue .ms{width:20px;height:32px;border:2px solid var(--ink3);border-radius:12px;position:relative;flex:none}
+.wl-cue .ms::before{content:'';position:absolute;left:50%;top:6px;width:4px;height:7px;margin-left:-2px;border-radius:2px;background:var(--cl);animation:wlWheel 1.6s ease-in-out infinite}
+.wl-cue svg{width:16px;height:16px;color:var(--cl);animation:wlBob 1.6s ease-in-out infinite}
+.wl-cue.gone{opacity:0;transform:translate(-50%,16px);pointer-events:none}
+@keyframes wlWheel{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(11px)}}
+@keyframes wlBob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.wl-mock{transform:perspective(1400px) rotateY(calc(-4deg + var(--p,0) * 4deg)) rotateX(calc(2deg - var(--p,0) * 2deg)) translateY(calc(var(--p,0) * -18px))}
+.wl-bars span{transform:scaleY(0);transform-origin:bottom;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.wl-mock.go .wl-bars span{transform:none}
+.wl-mini div{opacity:0;transform:translateX(14px);transition:opacity .5s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.wl-mock.go .wl-mini div{opacity:1;transform:none}
+.rv{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.rv-i{opacity:0;transform:translateY(24px) scale(.97);transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1),box-shadow .2s,border-color .2s}
+.rv.in .rv-i{opacity:1;transform:none}
+.wl-f.rv-i:hover,.wl-s.rv-i:hover,.wl-stat.rv-i:hover{border-color:color-mix(in srgb,var(--cl) 45%,var(--line));box-shadow:0 10px 26px -14px color-mix(in srgb,var(--cl) 55%,transparent);transform:translateY(-3px)}
+.rv li{opacity:0;transform:translateX(-14px);transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.rv.in li{opacity:1;transform:none}
+.wl-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.wl-stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;position:relative;overflow:hidden}
+.wl-stat::after{content:'';position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--cl);transition:width 1.2s cubic-bezier(.2,.8,.2,1) .2s}
+.rv.in .wl-stat::after{width:100%}
+.wl-stat b{display:block;font-size:clamp(30px,3.6vw,44px);line-height:1.05;letter-spacing:-.03em;color:var(--cl);font-variant-numeric:tabular-nums}
+.wl-stat span{font-size:13px;color:var(--ink2)}
+.wl-cat{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.wl-cat h3{margin:0 0 10px;font-size:14px}
+.wl-cat .row{display:grid;grid-template-columns:150px 1fr 74px;gap:12px;align-items:center;font-size:13px;padding:6px 0}
+.wl-cat .row em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink2)}
+.wl-cat .tr{height:10px;background:var(--panel2);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.wl-cat .tr i{display:block;height:100%;width:0;background:linear-gradient(90deg,color-mix(in srgb,var(--cl) 65%,transparent),var(--cl));border-radius:99px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+@media (prefers-reduced-motion:reduce){.rv,.rv-i,.rv li,.wl-mini div{opacity:1!important;transform:none!important;transition:none!important}.wl-bars span{transform:none;transition:none}.wl-cue svg,.wl-cue .ms::before{animation:none}.wl-cat .tr i{transition:none}}
+@media (max-width:980px){.wl-stats{grid-template-columns:1fr 1fr}.wl-mock{transform:none}}
+@media (max-width:620px){.wl-cat .row{grid-template-columns:96px 1fr 58px;gap:8px}.wl-cue{bottom:14px}}
 @media (max-width:980px){.wl-hero{grid-template-columns:1fr;gap:32px;padding-top:36px}.wl-mock{transform:none}.wl-feat{grid-template-columns:1fr 1fr}.wl-steps{grid-template-columns:1fr 1fr}.wl-band{grid-template-columns:1fr}}
 @media (max-width:620px){.wl-feat,.wl-steps{grid-template-columns:1fr}.wl-contact{grid-template-columns:1fr}.wl-top{gap:10px}.wl-orbit small,.wl-x,.wl-pill{display:none}.wl-go{width:100%;justify-content:center}.wl-sec{width:100%;text-align:center}}
 `;
 const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
 
 function preview(){
-  let out={value:0,harness:0,openSO:0,soCount:0,reorder:0,rows:[],bars:[]};
+  let out={value:0,harness:0,openSO:0,soCount:0,reorder:0,rows:[],bars:[],cats:[],nItems:0,nBoms:0,nCust:0,nTx:0,nLots:0};
   try{
     const c=calc();
     out.value=DB.items.reduce((a,i)=>a+c[i.id].value,0);
@@ -100,6 +135,8 @@ function preview(){
     const now=Date.now(), w=Array(12).fill(0);
     DB.txns.forEach(t=>{ const k=Math.floor((now-new Date(t.ts))/DAY/7); if(k<12&&t.qty<0&&t.type==='SHIP') w[11-k]+=-t.qty*item(t.itemId).price; });
     const mx=Math.max(...w,1); out.bars=w.map(v=>Math.max(6,Math.round(v/mx*100)));
+    const cat={}; DB.items.forEach(i=>cat[i.category]=(cat[i.category]||0)+c[i.id].value);
+    out.cats=Object.entries(cat).sort((a,b)=>b[1]-a[1]).slice(0,6); out.nItems=DB.items.length; out.nBoms=DB.boms.length; out.nCust=DB.customers.length; out.nTx=DB.txns.length; out.nLots=DB.stock.filter(s=>s.lot).length;
   }catch(e){}
   return out;
 }
@@ -130,7 +167,7 @@ function renderWelcome(){
   ]:[
     ['Open the dashboard','See what needs attention today.'],['Ship an order','Sales orders → Ship.'],['Run a query','Query explorer → pick a starter question.'],['Suggest changes','Use the yellow Suggest button.']];
   document.title=`Welcome, ${first} · ORBIT for ${C.company}`;
-  document.body.innerHTML=`<div class="wl">
+  document.body.innerHTML=`<div class="wl"><div class="wl-progress"></div><button class="wl-cue" id="wlCue" aria-label="Scroll to see more"><span class="ms"></span>Scroll to explore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
     <header class="wl-top">${logo}<span class="wl-x">×</span><span class="wl-orbit">${logoMark(22)} ORBIT <small>by Starsonn</small></span><span class="sp"></span><span class="wl-pill">Private demo</span></header>
     <div class="wl-wrap">
       <section class="wl-hero">
@@ -145,8 +182,8 @@ function renderWelcome(){
         <div class="wl-mock wl-anim d2" aria-hidden="true">
           <div class="wl-mock-h"><i></i><i></i><i></i><span style="margin-left:6px">${esc(C.company)} · Dashboard</span></div>
           <div class="wl-mock-b">
-            <div class="wl-kp"><div><small>Inventory value</small><b>${fmt$k(p.value)}</b></div><div><small>${fp?'Finished goods on hand':'Units on hand'}</small><b class="c">${fmtN(p.harness,0)}</b></div>
-            <div><small>Open ${fp?'distributor ':''}orders</small><b>${fmt$k(p.openSO)}</b></div><div><small>Parts to reorder</small><b class="w">${p.reorder}</b></div></div>
+            <div class="wl-kp"><div><small>Inventory value</small><b data-count="${p.value}" data-fmt="k">${fmt$k(p.value)}</b></div><div><small>${fp?'Finished goods on hand':'Units on hand'}</small><b class="c" data-count="${p.harness}">${fmtN(p.harness,0)}</b></div>
+            <div><small>Open ${fp?'distributor ':''}orders</small><b data-count="${p.openSO}" data-fmt="k">${fmt$k(p.openSO)}</b></div><div><small>Parts to reorder</small><b class="w" data-count="${p.reorder}">${p.reorder}</b></div></div>
             <div class="wl-mini">${p.rows.map(r=>`<div><span class="t">${esc(r.sku)}</span><span class="muted" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.name)}</span><span class="r">${statusPill(r.st)}</span></div>`).join('')}</div>
             <div class="small muted" style="margin-top:12px">Shipments, last 12 weeks</div>
             <div class="wl-bars">${p.bars.map(h=>`<span style="height:${h}%"></span>`).join('')}</div>
@@ -154,19 +191,31 @@ function renderWelcome(){
         </div>
       </section>
 
-      <section class="wl-block" id="wl-inside">
+      <section class="wl-block rv" id="wl-data">
+        <h2 class="wl-h2">Already loaded in your demo</h2>
+        <p class="wl-sub">${fp?'A working fall-protection shop, from raw webbing to boxed harnesses, ready to click through.':'A working shop, ready to click through.'}</p>
+        <div class="wl-stats">
+          <div class="wl-stat rv-i"><b data-count="${p.nItems}">${p.nItems}</b><span>parts tracked, from ${fp?'webbing and D-rings to finished harnesses':'raw stock to finished goods'}</span></div>
+          <div class="wl-stat rv-i"><b data-count="${p.nBoms}">${p.nBoms}</b><span>bills of material with rolled-up cost</span></div>
+          <div class="wl-stat rv-i"><b data-count="${p.nCust}">${p.nCust}</b><span>${fp?'distributors':'customers'} with open and shipped orders</span></div>
+          <div class="wl-stat rv-i"><b data-count="${p.nTx}">${fmtN(p.nTx,0)}</b><span>stock movements over 120 days, all traceable</span></div>
+        </div>
+        <div class="wl-cat rv-i"><h3>Where the inventory value sits</h3>${p.cats.map(c=>`<div class="row"><span>${esc(c[0])}</span><div class="tr"><i data-w="${Math.max(3,Math.round(c[1]/((p.cats[0]||[0,1])[1]||1)*100))}%"></i></div><em>${fmt$k(c[1])}</em></div>`).join('')}</div>
+      </section>
+
+      <section class="wl-block rv" id="wl-inside">
         <h2 class="wl-h2">${fp?'Built for a fall-protection shop':'What\'s inside'}</h2>
         <p class="wl-sub">${fp?'Set up with sample parts shaped like '+esc(C.company)+'\'s product lines: harnesses, lanyards, lifelines & grabs, anchorages and hardware.':'A working inventory and operations system you can click through.'}</p>
-        <div class="wl-feat">${feats.map(f=>`<div class="wl-f"><div class="ico">${I(f[0])}</div><h3>${esc(f[1])}</h3><p>${esc(f[2])}</p></div>`).join('')}</div>
+        <div class="wl-feat">${feats.map(f=>`<div class="wl-f rv-i"><div class="ico">${I(f[0])}</div><h3>${esc(f[1])}</h3><p>${esc(f[2])}</p></div>`).join('')}</div>
       </section>
 
-      <section class="wl-block">
+      <section class="wl-block rv">
         <h2 class="wl-h2">Try it in five minutes</h2>
         <p class="wl-sub">A few things worth clicking. You can't break anything, and Settings has a reset.</p>
-        <div class="wl-steps">${steps.map(s=>`<div class="wl-s"><b>${s[0]}</b><span>${s[1]}</span></div>`).join('')}</div>
+        <div class="wl-steps">${steps.map(s=>`<div class="wl-s rv-i"><b>${s[0]}</b><span>${s[1]}</span></div>`).join('')}</div>
       </section>
 
-      <section class="wl-block">
+      <section class="wl-block rv">
         <div class="wl-band">
           <div><h2 class="wl-h2">Coming from ${esc(sys)}</h2>
             <p class="wl-sub" style="margin-bottom:0">Your data comes with you. ${esc(sys)} can download its screens to Excel, and ORBIT reads those files directly, matches the columns and shows you a preview before anything changes.</p></div>
@@ -174,7 +223,7 @@ function renderWelcome(){
         </div>
       </section>
 
-      <section class="wl-block">
+      <section class="wl-block rv">
         <div class="wl-contact">
           <div class="wl-person"><span class="av">${esc(initials(ST.name))}</span><div><small>${esc(ST.role)}</small><b>${esc(ST.name)}</b><a href="mailto:${esc(ST.email)}?subject=${encodeURIComponent('ORBIT demo for '+C.company)}">${esc(ST.email)}</a>${ST.phone?` · <a href="tel:${esc(ST.phone)}">${esc(ST.phone)}</a>`:''}</div></div>
           <button class="wl-go" id="wlGo2">Jump in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -183,10 +232,28 @@ function renderWelcome(){
       <div class="login-card wl-foot"></div>
     </div>
   </div>`;
-  $('#wlGo').onclick=jump; $('#wlGo2').onclick=jump;
+  $('#wlGo').onclick=jump; $('#wlGo2').onclick=jump; motion();
   $('#wlMore').onclick=e=>{ e.preventDefault(); $('#wl-inside').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}); };
 }
+function motion(){
+  const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmtOf=el=>v=>el.dataset.fmt==='k'?fmt$k(v):fmtN(Math.round(v),0);
+  const count=el=>{ const to=+el.dataset.count||0, f=fmtOf(el); if(rm){ el.textContent=f(to); return; } const t0=performance.now(), dur=1300;
+    const step=t=>{ const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3); el.textContent=f(to*e); if(k<1) requestAnimationFrame(step); }; requestAnimationFrame(step); };
+  if(!rm) $$('[data-count]').forEach(el=>el.textContent=fmtOf(el)(0));
+  $$('.rv').forEach(sec=>{ $$('.rv-i',sec).forEach((c,i)=>c.style.transitionDelay=(i*90)+'ms'); $$('li',sec).forEach((c,i)=>c.style.transitionDelay=(150+i*80)+'ms'); });
+  $$('.wl-mini div').forEach((c,i)=>c.style.transitionDelay=(250+i*120)+'ms'); $$('.wl-bars span').forEach((c,i)=>c.style.transitionDelay=(i*45)+'ms');
+  const mock=$('.wl-mock'); setTimeout(()=>{ if(mock) mock.classList.add('go'); $$('.wl-mock [data-count]').forEach(count); }, rm?0:500);
+  const show=sec=>{ sec.classList.add('in'); setTimeout(()=>$$('.rv-i',sec).forEach(c=>c.style.transitionDelay=''),rm?0:1800); $$('[data-count]',sec).forEach(count); $$('.tr i',sec).forEach((i,k)=>setTimeout(()=>{ i.style.width=i.dataset.w; }, rm?0:250+k*110)); };
+  if(rm||!('IntersectionObserver' in window)) $$('.rv').forEach(show);
+  else { const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ show(en.target); io.unobserve(en.target); } }),{threshold:.15,rootMargin:'0px 0px -6% 0px'}); $$('.rv').forEach(s=>io.observe(s)); }
+  const bar=$('.wl-progress'), cue=$('#wlCue');
+  const onS=()=>{ const h=document.documentElement.scrollHeight-innerHeight, y=scrollY; if(bar) bar.style.transform='scaleX('+(h>0?Math.min(1,y/h):0)+')'; if(cue) cue.classList.toggle('gone',y>80); if(mock&&!rm) mock.style.setProperty('--p',Math.min(1,y/520).toFixed(3)); };
+  if(window.__wlS) removeEventListener('scroll',window.__wlS); window.__wlS=onS; addEventListener('scroll',onS,{passive:true}); onS();
+  if(cue) cue.onclick=()=>$('#wl-data').scrollIntoView({behavior:rm?'auto':'smooth',block:'start'});
+}
 function jump(){
+  if(window.__wlS){ removeEventListener('scroll',window.__wlS); window.__wlS=null; }
   Session.user={name:C.contact,email:C.email||'',company:C.company,title:C.title||'',client:C.slug,since:new Date().toISOString()};
   store.set('orbit.session',Session.user); store.set('orbit.name',C.contact); store.set('orbit.welcomed',1);
   if(C.company&&DB.company!==C.company){ DB.company=C.company; save(); }
