@@ -147,8 +147,8 @@ function records(){
     if(any) out.push(o); });
   return out;
 }
-const findVendor=v=>{ const n=norm(v); return DB.vendors.find(x=>norm(x.id)===n||norm(x.name)===n); };
-const findCustomer=v=>{ const n=norm(v); return DB.customers.find(x=>norm(x.id)===n||norm(x.name)===n); };
+const findVendor=v=>{ const n=norm(v); if(!n) return null; return DB.vendors.find(x=>norm(x.id)===n||norm(x.name)===n); };
+const findCustomer=v=>{ const n=norm(v); if(!n) return null; return DB.customers.find(x=>norm(x.id)===n||norm(x.name)===n); };
 function typeOf(v,fallback){ const s=norm(v); if(!s) return fallback||'Purchased';
   if(/raw|material|stock/.test(s)) return 'Raw'; if(/finish|fg|assembl|end item|saleable|top/.test(s)) return 'Finished'; if(/make|manuf|component|sub|wip|fab|machin/.test(s)) return 'Component';
   if(/consum|supply|supplies|expense|pack/.test(s)) return 'Consumable'; return 'Purchased'; }
@@ -159,8 +159,8 @@ function check(recs){
     SETS[S.ds].fields.forEach(f=>{ if(f.req&&(r[f.k]==null||r[f.k]==='')) e.push(f.label+' is blank'); if(f.type==='num'&&Number.isNaN(r[f.k])) e.push(f.label+' isn\'t a number'); if(f.type==='date'&&Number.isNaN(r[f.k])) e.push(f.label+' isn\'t a date'); });
     let st='New';
     if(S.ds==='items'){ if(r.sku&&itemBySku(r.sku)&&!S.wipe) st='Update'; if(r.onHand!=null&&r.onHand<0) e.push('Negative on-hand'); }
-    if(S.ds==='vendors'&&r.name&&findVendor(r.id||r.name)&&!S.wipe) st='Update';
-    if(S.ds==='customers'&&r.name&&findCustomer(r.id||r.name)&&!S.wipe) st='Update';
+    if(S.ds==='vendors'&&r.name&&(findVendor(r.id)||findVendor(r.name))&&!S.wipe) st='Update';
+    if(S.ds==='customers'&&r.name&&(findCustomer(r.id)||findCustomer(r.name))&&!S.wipe) st='Update';
     if(S.ds==='polines'||S.ds==='solines'){ if(r.sku&&!(S.wipe?false:!!itemBySku(r.sku))) e.push('Unknown SKU '+r.sku+' — import items first'); if(r.num&&(S.ds==='polines'?DB.pos:DB.sos).some(p=>norm(p.num)===norm(r.num))&&!S.wipe) st='Replace'; }
     if(S.ds==='boms'){ if(r.parent&&!itemBySku(r.parent)) e.push('Unknown parent '+r.parent); if(r.comp&&!itemBySku(r.comp)) e.push('Unknown component '+r.comp); if(r.parent&&bomOf((itemBySku(r.parent)||{}).id)) st='Replace'; }
     return {...r,_st:e.length?'Error':st,_err:e.join('; ')}; });
@@ -187,9 +187,9 @@ function apply(rows){
       if(r.lot) it.lotTracked=true; const loc=r.loc?ensureLoc(r.loc):it.defaultLoc; if(r.loc&&isNew) it.defaultLoc=loc;
       if(r.onHand!=null){ const e=setStock(it,loc,r.lot,r.onHand); if(e) res.errors.push('Row '+r._row+': '+e); }
       bump(isNew?'New':'Update'); }); }
-  if(S.ds==='vendors') good.forEach(r=>{ let v=findVendor(r.id||r.name); const isNew=!v; if(isNew){ v={id:r.id||('V'+(900+DB.vendors.length)),name:r.name,contact:'',phone:'',email:'',terms:'Net 30',lead:7,rating:0}; DB.vendors.push(v); }
+  if(S.ds==='vendors') good.forEach(r=>{ let v=findVendor(r.id)||findVendor(r.name); const isNew=!v; if(isNew){ v={id:r.id||('V'+(900+DB.vendors.length)),name:r.name,contact:'',phone:'',email:'',terms:'Net 30',lead:7,rating:0}; DB.vendors.push(v); }
     ['name','contact','phone','email','terms'].forEach(k=>{ if(r[k]) v[k]=r[k]; }); if(r.lead!=null) v.lead=r.lead; bump(isNew?'New':'Update'); });
-  if(S.ds==='customers') good.forEach(r=>{ let c=findCustomer(r.id||r.name); const isNew=!c; if(isNew){ c={id:r.id||('C'+(900+DB.customers.length)),name:r.name,city:'',terms:'Net 30',contact:''}; DB.customers.push(c); }
+  if(S.ds==='customers') good.forEach(r=>{ let c=findCustomer(r.id)||findCustomer(r.name); const isNew=!c; if(isNew){ c={id:r.id||('C'+(900+DB.customers.length)),name:r.name,city:'',terms:'Net 30',contact:''}; DB.customers.push(c); }
     ['name','contact','city','terms'].forEach(k=>{ if(r[k]) c[k]=r[k]; }); bump(isNew?'New':'Update'); });
   if(S.ds==='polines'||S.ds==='solines'){ const isPO=S.ds==='polines', list=isPO?DB.pos:DB.sos, groups=new Map();
     good.forEach(r=>{ const k=String(r.num).trim(); if(!groups.has(k)) groups.set(k,[]); groups.get(k).push(r); });
