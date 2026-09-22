@@ -16,7 +16,7 @@ function renderLogin(){
   <div class="login">
     <section class="login-art">
       <svg class="orbits" viewBox="0 0 560 560" fill="none" stroke="#7FA7FF" stroke-width="1"><ellipse cx="280" cy="280" rx="260" ry="110" transform="rotate(-20 280 280)"/><ellipse cx="280" cy="280" rx="200" ry="200" stroke-dasharray="3 7"/><ellipse cx="280" cy="280" rx="240" ry="80" transform="rotate(35 280 280)"/><circle cx="280" cy="280" r="36" fill="#1E3A6E" stroke="#7FA7FF"/><circle cx="505" cy="190" r="7" fill="#F59E0B" stroke="none"/><circle cx="120" cy="420" r="5" fill="#34D399" stroke="none"/><circle cx="410" cy="440" r="4" fill="#7FA7FF" stroke="none"/></svg>
-      <div class="brand">${logoMark(28)} ORBIT <small>by Starsonn</small> <span class="proto-tag">Prototype</span></div>
+      <div><div class="brand">${logoMark(28)} ORBIT <small>by Starsonn</small> <span class="proto-tag">Prototype</span></div><div class="orbit-full"><b>O</b>perations &amp; <b>R</b>esource <b>B</b>usiness <b>I</b>ntelligence <b>T</b>ool</div></div>
       <div style="position:relative">
         <h1>Know exactly what's on the shelf — and what it'll take to ship.</h1>
         <p>Inventory, purchasing, production and sales in one place, with a query tool that answers questions without a report writer.</p>
@@ -55,7 +55,7 @@ function renderShell(){
   <div class="app" id="app">
     <div class="side-scrim" id="sscrim"></div>
     <aside class="side">
-      <div class="brand">${logoMark(26)} ORBIT <small>by Starsonn</small></div>
+      <div class="brand">${logoMark(26)} ORBIT <small>by Starsonn</small></div><div class="orbit-full"><b>O</b>perations &amp; <b>R</b>esource <b>B</b>usiness <b>I</b>ntelligence <b>T</b>ool</div>
       <nav class="nav" id="nav"></nav>
       <div class="side-foot"><div style="color:#fff;font-weight:600" id="coName"></div><div>${APP.version} · sample data</div></div>
     </aside>
