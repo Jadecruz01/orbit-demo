@@ -208,7 +208,7 @@ function renderWelcome(){
 
       <section class="wl-block rv" id="wl-inside">
         <h2 class="wl-h2">${fp?'Built for a fall-protection shop':'What\'s inside'}</h2>
-        <p class="wl-sub">${fp?'Set up with sample parts shaped like '+esc(C.company)+'\'s product lines: harnesses, lanyards, lifelines & grabs, anchorages and hardware.':'A working inventory and operations system you can click through.'}</p>
+        <p class="wl-sub">${fp?'Set up with sample parts shaped like a fall-protection product line: harnesses, lanyards, lifelines &amp; grabs, anchorages and hardware.':'A working inventory and operations system you can click through.'}</p>
         <div class="wl-feat">${feats.map(f=>`<div class="wl-f rv-i"><div class="ico">${I(f[0])}</div><h3>${esc(f[1])}</h3><p>${esc(f[2])}</p></div>`).join('')}</div>
       </section>
 
