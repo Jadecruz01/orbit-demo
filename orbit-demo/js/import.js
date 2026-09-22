@@ -3,7 +3,7 @@
 (function(){
 const XLSX_URL='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
 const css=`
-.imp-drop{border:2px dashed var(--line2);border-radius:14px;padding:34px 20px;text-align:center;background:var(--panel);cursor:pointer;transition:border-color .15s,background .15s}
+.imp-drop{display:block;border:2px dashed var(--line2);border-radius:14px;padding:34px 20px;text-align:center;background:var(--panel);cursor:pointer;transition:border-color .15s,background .15s}
 .imp-drop:hover,.imp-drop.over{border-color:var(--acc);background:var(--accSoft)}
 .imp-drop h3{margin:8px 0 4px;font-size:17px}
 .imp-drop svg{width:34px;height:34px;color:var(--acc)}
