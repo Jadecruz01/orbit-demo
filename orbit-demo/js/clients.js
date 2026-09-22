@@ -13,7 +13,7 @@ window.ORBIT_CLIENTS = {
   'fallpro': {
     company: 'Fall Protection Demo',
     website: '',
-    host: 'elkriver-orbitdemo.starsonn.com',
+    host: 'orbitdemo.starsonn.com',
     logo: '',
     logoDark: '',
     tagline: 'Personal fall protection',
